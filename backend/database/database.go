@@ -19,7 +19,7 @@ type DB struct {
 func Connect() *DB {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb+srv://erkshitizshrestha:NDSmorbnMmL5nt1N@cluster0.85umjur.mongodb.net/?retryWrites=true&w=majority"))
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb+srv://erkshitizshrestha:WgrfamQ8MM0Kk5pE@mbocluster.rryr7kh.mongodb.net/"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -28,7 +28,7 @@ func Connect() *DB {
 	}
 }
 
-func (db *DB) Save(input *model.NewDog) *model.Dog {
+func (db *DB) Save(input *model.NewUser) *model.User {
 	collection := db.client.Database("animals").Collection("dogs")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -36,58 +36,62 @@ func (db *DB) Save(input *model.NewDog) *model.Dog {
 	if err != nil {
 		log.Fatal(err)
 	}
-	return &model.Dog{
-		ID:        res.InsertedID.(primitive.ObjectID).Hex(),
-		Name:      input.Name,
-		IsGoodboi: input.IsGoodboi,
+	return &model.User{
+		ID:       res.InsertedID.(primitive.ObjectID).Hex(),
+		Name:     input.Name,
+		Email:    input.Email,
+		IsActive: input.IsActive,
 	}
 }
 
-type RamroDog struct {
-	ID        primitive.ObjectID `json:"_id" bson:"_id"`
-	Name      string             `json:"name"`
-	IsGoodboi bool               `json:"isGoodboi"`
+type RamroUser struct {
+	ID       primitive.ObjectID `json:"_id" bson:"_id"`
+	Name     string             `json:"name"`
+	Email    string             `json:"email"`
+	IsActive bool               `json:"IsActive"`
 }
 
-func (db *DB) FindByID(ID string) *model.Dog {
+func (db *DB) FindByID(ID string) *model.User {
 	ObjectID, err := primitive.ObjectIDFromHex(ID)
-	collection := db.client.Database("animals").Collection("dogs")
+	collection := db.client.Database("mbo").Collection("users")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	res := collection.FindOne(ctx, bson.M{"_id": ObjectID})
 	if err != nil {
 		log.Fatal(err)
 	}
-	dog := RamroDog{}
+	dog := RamroUser{}
 	res.Decode(&dog)
-	newDog := model.Dog{
-		ID:        dog.ID.Hex(),
-		Name:      dog.Name,
-		IsGoodboi: dog.IsGoodboi,
+	newUser := model.User{
+		ID:       dog.ID.Hex(),
+		Name:     dog.Name,
+		Email:    dog.Email,
+		IsActive: dog.IsActive,
 	}
-	return &newDog
+	return &newUser
 }
 
-func (db *DB) All() []*model.Dog {
-	collection := db.client.Database("animals").Collection("dogs")
+func (db *DB) All() []*model.User {
+	collection := db.client.Database("mbo").Collection("users")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	cur, err := collection.Find(ctx, bson.D{})
 	if err != nil {
 		log.Fatal(err)
 	}
-	var dogs []*model.Dog
+	var users []*model.User
 	for cur.Next(ctx) {
-		var dog *RamroDog
+		var dog *RamroUser
 		err := cur.Decode(&dog)
 		if err != nil {
 			log.Fatal(err)
 		}
-		dogs = append(dogs, &model.Dog{
-			ID:        dog.ID.Hex(),
-			Name:      dog.Name,
-			IsGoodboi: dog.IsGoodboi,
+		users = append(users, &model.User{
+			ID:       dog.ID.Hex(),
+			Name:     dog.Name,
+			Email:    dog.Email,
+			IsActive: dog.IsActive,
 		})
 	}
-	return dogs
+	return users
 }

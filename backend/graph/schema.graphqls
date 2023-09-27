@@ -1,19 +1,21 @@
-type Dog {
+type User {
   _id: String!
   name: String!
-  isGoodboi: Boolean!
+  email: String!
+  isActive: Boolean!
 }
 
 type Query {
-  dog(_id: String!): Dog!
-  dogs: [Dog!]!
+  user(_id: String!): User!
+  users: [User!]!
 }
 
-input NewDog{
+input NewUser{
   name: String!
-  isGoodboi: Boolean!
+  email: String!
+  isActive: Boolean!
 }
 
 type Mutation{
-  createDog(input: NewDog): Dog!
+  createUser(input: NewUser): User!
 }

@@ -2,13 +2,15 @@
 
 package model
 
-type Dog struct {
-	ID        string `json:"_id"`
-	Name      string `json:"name"`
-	IsGoodboi bool   `json:"isGoodboi"`
+type NewUser struct {
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	IsActive bool   `json:"isActive"`
 }
 
-type NewDog struct {
-	Name      string `json:"name"`
-	IsGoodboi bool   `json:"isGoodboi"`
+type User struct {
+	ID       string `json:"_id"`
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	IsActive bool   `json:"isActive"`
 }

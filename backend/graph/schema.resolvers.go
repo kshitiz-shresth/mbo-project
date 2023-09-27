@@ -13,18 +13,18 @@ import (
 
 var db = database.Connect()
 
-// CreateDog is the resolver for the createDog field.
-func (r *mutationResolver) CreateDog(ctx context.Context, input *model.NewDog) (*model.Dog, error) {
+// CreateUser is the resolver for the createUser field.
+func (r *mutationResolver) CreateUser(ctx context.Context, input *model.NewUser) (*model.User, error) {
 	return db.Save(input), nil
 }
 
-// Dog is the resolver for the dog field.
-func (r *queryResolver) Dog(ctx context.Context, id string) (*model.Dog, error) {
+// User is the resolver for the user field.
+func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
 	return db.FindByID(id), nil
 }
 
-// Dogs is the resolver for the dogs field.
-func (r *queryResolver) Dogs(ctx context.Context) ([]*model.Dog, error) {
+// Users is the resolver for the users field.
+func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 	return db.All(), nil
 }
 
