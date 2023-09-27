@@ -29,7 +29,7 @@ func Connect() *DB {
 }
 
 func (db *DB) Save(input *model.NewUser) *model.User {
-	collection := db.client.Database("animals").Collection("dogs")
+	collection := db.client.Database("mbo").Collection("users")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	res, err := collection.InsertOne(ctx, input)
